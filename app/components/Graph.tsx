@@ -2,6 +2,19 @@
 
 import React from 'react';
 
+function useContainerWidth(ref: React.RefObject<HTMLDivElement | null>, fallback = 320): number {
+  const [width, setWidth] = React.useState(fallback);
+  React.useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    setWidth(el.clientWidth);
+    const ro = new ResizeObserver(([entry]) => setWidth(entry.contentRect.width));
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [ref]);
+  return width;
+}
+
 interface LineGraphProps {
   points: number[];
   width?: number;
@@ -76,7 +89,7 @@ export function LineGraph({
   return (
     <svg
       ref={svgRef}
-      width="100%"
+      width={width}
       height={height}
       viewBox={`0 0 ${width} ${height}`}
       style={{ display: 'block', touchAction: 'none', cursor: interactive ? 'crosshair' : 'default' }}
@@ -101,6 +114,18 @@ export function LineGraph({
         </g>
       )}
     </svg>
+  );
+}
+
+type ResponsiveLineGraphProps = Omit<LineGraphProps, 'width'> & { height: number };
+
+export function ResponsiveLineGraph(props: ResponsiveLineGraphProps) {
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const width = useContainerWidth(containerRef);
+  return (
+    <div ref={containerRef} style={{ width: '100%' }}>
+      <LineGraph {...props} width={width} />
+    </div>
   );
 }
 

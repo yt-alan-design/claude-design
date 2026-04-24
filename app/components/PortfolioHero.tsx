@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { LineGraph } from './Graph';
+import { ResponsiveLineGraph } from './Graph';
 import { Portfolio, RANGES, Range } from './data';
 import { Theme } from './types';
 import { fmtMoney, fmtPct } from './utils';
@@ -150,9 +150,8 @@ export function PortfolioHero({ portfolio, theme }: PortfolioHeroProps) {
       </div>
 
       {/* Graph */}
-      <LineGraph
+      <ResponsiveLineGraph
         points={pts}
-        width={320}
         height={100}
         stroke={lineColor}
         onHover={setHover}

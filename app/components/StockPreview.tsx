@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { LineGraph } from './Graph';
+import { ResponsiveLineGraph } from './Graph';
 import { Ticker, Range } from './data';
 import { Theme } from './types';
 import { fmtMoney, fmtPct, fmtSigned } from './utils';
@@ -124,9 +124,8 @@ export function StockPreview({ ticker, theme }: StockPreviewProps) {
 
       {/* Graph */}
       <div style={{ position: 'relative' }}>
-        <LineGraph
+        <ResponsiveLineGraph
           points={pts}
-          width={320}
           height={120}
           stroke={lineColor}
           onHover={setHover}
